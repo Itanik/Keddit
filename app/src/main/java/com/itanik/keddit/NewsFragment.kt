@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.itanik.keddit.features.news.adapter.NewsAdapter
 import kotlinx.android.synthetic.main.news_fragment.*
 
 class NewsFragment : Fragment() {
@@ -19,5 +20,12 @@ class NewsFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         news_list?.setHasFixedSize(true) // оптимизирует скорость разворачиваия списка
         news_list?.layoutManager = LinearLayoutManager(context)
+        initAdapter()
+    }
+
+    private fun initAdapter() {
+        if (news_list.adapter == null) {
+            news_list.adapter = NewsAdapter()
+        }
     }
 }
