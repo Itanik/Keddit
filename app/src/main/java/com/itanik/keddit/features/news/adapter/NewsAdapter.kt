@@ -1,8 +1,10 @@
 package com.itanik.keddit.features.news.adapter
 
+import android.util.Log
 import android.view.ViewGroup
 import androidx.collection.SparseArrayCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.itanik.keddit.commons.RedditNewsItem
 import com.itanik.keddit.commons.adapter.AdapterConstants
 import com.itanik.keddit.commons.adapter.ViewType
 import com.itanik.keddit.commons.adapter.ViewTypeDelegateAdapter
@@ -19,6 +21,7 @@ class NewsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     init {
         delegateAdapters.put(AdapterConstants.LOADING, LoadingDelegateAdapter())
+        delegateAdapters.put(AdapterConstants.NEWS, NewsDelegateAdapter())
         items.add(loadingItem)
 
     }
@@ -36,5 +39,17 @@ class NewsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemViewType(position: Int): Int {
         return items[position].getViewType()
+    }
+
+    fun addNews(news: List<RedditNewsItem>) {
+        // first remove loading and notify
+        val initPosition = items.lastIndex
+        //items.removeAt(initPosition)
+        //notifyItemRemoved(initPosition)
+        // insert news and the loading at the end of the list
+        //items.addAll(news)
+        items.addAll(initPosition, news)
+        //items.add(loadingItem)
+        notifyItemRangeChanged(initPosition, items.size + 1 /* plus loading item */)
     }
 }

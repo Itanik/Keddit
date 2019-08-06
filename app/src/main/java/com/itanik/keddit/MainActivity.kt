@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun changeFragment(f: Fragment, cleanStack: Boolean = false) {
-        val ft = supportFragmentManager.beginTransaction();
+        val ft = supportFragmentManager.beginTransaction()
         if (cleanStack) {
             clearBackStack()
         }
@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        val fragmentManager = supportFragmentManager;
+        val fragmentManager = supportFragmentManager
         if (fragmentManager.backStackEntryCount > 1) {
             fragmentManager.popBackStack()
         } else {

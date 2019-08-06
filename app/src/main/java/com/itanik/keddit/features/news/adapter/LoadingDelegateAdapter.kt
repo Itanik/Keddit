@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.itanik.keddit.R
 import com.itanik.keddit.commons.adapter.ViewType
 import com.itanik.keddit.commons.adapter.ViewTypeDelegateAdapter
-import com.itanik.keddit.inflate
+import com.itanik.keddit.commons.extensions.inflate
 
 class LoadingDelegateAdapter : ViewTypeDelegateAdapter {
     override fun onCreateViewHolder(parent: ViewGroup) = TurnsViewHolder(parent)
