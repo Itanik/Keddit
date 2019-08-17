@@ -3,14 +3,14 @@ package com.itanik.keddit.features.news
 import com.itanik.keddit.commons.RedditNewsItem
 import io.reactivex.Observable
 
-class NewsManager() {
+class NewsManager {
 
     fun getNews(): Observable<List<RedditNewsItem>> {
         return Observable.create {
                 subscriber ->
 
             val news = (1..10).map { RedditNewsItem(
-                    "author$it",
+                    "Author$it",
                     "Title $it",
                     it, // number of comments
                     1457207701L - it * 200000, // time
