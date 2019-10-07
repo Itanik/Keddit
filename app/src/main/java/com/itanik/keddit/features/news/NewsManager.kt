@@ -1,15 +1,16 @@
 package com.itanik.keddit.features.news
 
-import com.itanik.keddit.api.RestAPI
+import com.itanik.keddit.api.NewsAPI
+import com.itanik.keddit.api.NewsRestAPI
 import com.itanik.keddit.commons.RedditNews
 import com.itanik.keddit.commons.RedditNewsItem
 import io.reactivex.Observable
 
 /**
-* Позволяет получать новости от Reddit API
+ * Управляет взаимодействием с Reddit RestApi
  * */
 
-class NewsManager(private val api: RestAPI = RestAPI()) {
+class NewsManager(private val api: NewsAPI = NewsRestAPI()) {
 
     fun getNews(after: String, limit: String = "10"): Observable<RedditNews> {
         return Observable.create {

@@ -19,6 +19,10 @@ class NewsFragment : RxBaseFragment() {
     private val newsManager by lazy { NewsManager() }
     private var redditNews: RedditNews? = null
 
+    companion object {
+        private val KEY_REDDIT_NEWS = "redditNews"
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return container?.inflate(R.layout.news_fragment)
@@ -26,15 +30,18 @@ class NewsFragment : RxBaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        news_list?.setHasFixedSize(true) // оптимизирует скорость разворачиваия списка
-        val linearLayout = LinearLayoutManager(context)
-        news_list.layoutManager = linearLayout
-        news_list.clearOnScrollListeners()
-        news_list.addOnScrollListener(InfiniteScrollListener({ requestNews() }, linearLayout))
-        initAdapter()
-        if (savedInstanceState == null) {
-            requestNews()
+        news_list.apply {
+            setHasFixedSize(true)
+            val linearLayout = LinearLayoutManager(context)
+            layoutManager = linearLayout
+            clearOnScrollListeners()
+            addOnScrollListener(InfiniteScrollListener({ requestNews() }, linearLayout))
         }
+        initAdapter()
+        if (savedInstanceState != null && savedInstanceState.containsKey(KEY_REDDIT_NEWS)) {
+            redditNews = savedInstanceState.get(KEY_REDDIT_NEWS) as RedditNews
+            (news_list.adapter as NewsAdapter).clearAndAddNews(redditNews!!.news)
+        } else requestNews()
     }
 
     private fun initAdapter() {
@@ -43,6 +50,9 @@ class NewsFragment : RxBaseFragment() {
         }
     }
 
+    /**
+     * Подписывается на новости
+     * */
     private fun requestNews() {
         val subscription = newsManager.getNews(redditNews?.after ?: "")
             .subscribeOn(Schedulers.io())
@@ -56,5 +66,13 @@ class NewsFragment : RxBaseFragment() {
                 }
             )
         subscriptions.add(subscription)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        val news = (news_list.adapter as NewsAdapter).getNews()
+        if (redditNews != null && news.isNotEmpty()) {
+            outState.putParcelable(KEY_REDDIT_NEWS, redditNews?.copy(news = news))
+        }
     }
 }
